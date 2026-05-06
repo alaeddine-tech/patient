@@ -1,22 +1,6 @@
 
 
-const API = 'http://localhost/cabinet/back-end/api1.php';   // ← same as admin.js
 
-/* ── API helper ─────────────────────────────────────────── */
-async function apiFetch(endpoint, method = 'GET', data = null) {
-  try {
-    const opts = { method, headers: { 'Content-Type': 'application/json' } };
-    if (data) opts.body = JSON.stringify(data);
-    const res = await fetch(`${API}?url=${endpoint}`, opts);
-    if (!res.ok) throw new Error('Erreur serveur');
-    return await res.json();
-  } catch (e) {
-    toast(e.message || 'Erreur de connexion', 'danger');
-    return null;
-  }
-}
-
-/* ── i18n ────────────────────────────────────────────────── */
 const T = {
   fr: {
     login_title:'Al Shifa — Patient', login_sub:'Votre espace santé personnel',
