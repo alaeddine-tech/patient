@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Al Shifa — Espace Patient</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="patient.css" />
+  <link rel="stylesheet" href="patiennt.css" />
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════ -->
+  <div id="auth-screen">
+    <div class="auth-card">
+
+      <!-- Language switcher (top right of card) -->
+      <div class="auth-lang">
+        <button class="lang-btn active" data-lang="fr" onclick="setLang('fr',this)">FR</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en',this)">EN</button>
+        <button class="lang-btn" data-lang="ar" onclick="setLang('ar',this)">AR</button>
+      </div>
+
+      <a class="back-link" onclick="window.location.href='index.html'" data-i18n="back">← Retour à l'accueil</a>
+
+      <div class="auth-logo">
+
+        <div>
+          <div class="auth-logo-name" data-i18n="login_title">Al Shifa — Patient</div>
+          <div class="auth-logo-sub" data-i18n="login_sub">Votre espace santé personnel</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')" data-i18n="tab_login">Se
+          connecter</button>
+        <button class="auth-tab" id="tab-register" onclick="switchTab('register')" data-i18n="tab_reg">Créer un
+          compte</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="login-form">
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl_user">Email ou téléphone</label>
+          <input class="form-input" id="l-user" type="text" data-i18n="lbl_user"
+            placeholder="email@exemple.com ou 06XX…" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl_pass">Mot de passe</label>
+          <input class="form-input" id="l-pass" type="password" placeholder="••••••••" />
+        </div>
+        <div class="auth-err" id="l-err"></div>
+        <button class="btn-primary" id="btn-login" onclick="doLogin()">
+          <span data-i18n="btn_login"> Se connecter</span>
+        </button>
+        <div class="auth-switch">
+          <span data-i18n="no_account">Pas encore de compte ?</span>
+          <a onclick="switchTab('register')" data-i18n="reg_link">Créer un compte →</a>
+        </div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="register-form" style="display:none">
+        <div class="form-row auth-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="lbl_prenom">Prénom *</label>
+            <input class="form-input" id="r-prenom" placeholder="Prénom" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="lbl_nom">Nom *</label>
+            <input class="form-input" id="r-nom" placeholder="Nom" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl_email">Email *</label>
+          <input class="form-input" id="r-email" type="email" placeholder="email@exemple.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl_tel">Téléphone *</label>
+          <input class="form-input" id="r-tel" type="tel" placeholder="06XX XXX XXX" />
+        </div>
+        <div class="form-row auth-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="lbl_dob">Date de naissance</label>
+            <input class="form-input" id="r-dob" type="date" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="lbl_sexe">Sexe</label>
+            <select class="form-select" id="r-sexe">
+              <option value="">—</option>
+              <option>Masculin</option>
+              <option>Féminin</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl_pass_new">Mot de passe *</label>
+          <input class="form-input" id="r-pass" type="password" placeholder="Min. 6 caractères" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="lbl_pass_conf">Confirmer *</label>
+          <input class="form-input" id="r-pass2" type="password" placeholder="Répéter" />
+        </div>
+        <div class="auth-err" id="r-err"></div>
+        <button class="btn-primary" id="btn-reg" onclick="doRegister()">
+          <span data-i18n="btn_reg"> Créer mon compte</span>
+        </button>
+        <div class="auth-switch">
+          <span data-i18n="already">Déjà un compte ?</span>
+          <a onclick="switchTab('login')" data-i18n="signup_link">Se connecter →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════ -->
+  <div id="app">
+    <nav class="top-nav">
+      <div class="nav-logo">⚕ Al Shifa <span>Patient</span></div>
+      <div class="nav-user">
+        <!-- Language switcher inside app -->
+        <div class="app-lang">
+          <button class="lang-btn active" data-lang="fr" onclick="setLang('fr',this)">FR</button>
+          <button class="lang-btn" data-lang="en" onclick="setLang('en',this)">EN</button>
+          <button class="lang-btn" data-lang="ar" onclick="setLang('ar',this)">AR</button>
+        </div>
+        <div class="nav-av" id="nav-av">P</div>
+        <span class="nav-name" id="nav-name"></span>
+        <button class="btn-logout" onclick="doLogout()">
+          <span data-i18n="logout">⏻ Quitter</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="app-body">
+      <aside class="sidebar">
+        <button class="side-btn active" onclick="goPage('dashboard',this)">
+          <span class="side-ic"></span>
+          <span data-i18n="nav_home">Accueil</span>
+        </button>
+        <button class="side-btn" onclick="goPage('rdv',this)">
+
+          <span data-i18n="nav_rdv">Prendre RDV</span>
+        </button>
+        <button class="side-btn" onclick="goPage('mes-rdv',this)">
+
+          <span data-i18n="nav_myrdv">Mes rendez-vous</span>
+        </button>
+        <button class="side-btn" onclick="goPage('profil',this)">
+
+          <span data-i18n="nav_profil">Mon profil</span>
+        </button>
+      </aside>
+
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="pg-dashboard">
+          <div class="page-title" id="dash-title">Bonjour !</div>
+          <div class="page-sub" data-i18n="login_sub">Bienvenue dans votre espace patient Al Shifa.</div>
+          <div class="stats-row" id="dash-stats"></div>
+          <div id="dash-recent"></div>
+        </div>
+
+        <!-- PRENDRE RDV -->
+        <div class="page" id="pg-rdv">
+          <div class="page-title" data-i18n="pg_rdv"> Prendre un rendez-vous</div>
+          <div class="page-sub" data-i18n="pg_rdv_sub">Remplissez le formulaire pour soumettre votre demande.</div>
+          <div class="form-card">
+            <div class="section-title" data-i18n="pg_rdv">Détails de la demande</div>
+            <div class="form-row">
+              <div class="fg">
+                <label class="fl" data-i18n="lbl_doctor">Médecin souhaité</label>
+                <select class="fsel" id="rq-med">
+                  <option value="">— Indifférent —</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="fl" data-i18n="lbl_date">Date souhaitée *</label>
+                <input class="fi" id="rq-date" type="date" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="fg">
+                <label class="fl" data-i18n="lbl_motif">Motif *</label>
+                <select class="fsel" id="rq-motif">
+                  <option value="">—</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="fl" data-i18n="lbl_urgence">Urgence</label>
+                <select class="fsel" id="rq-urgence">
+                  <option>Normal</option>
+                  <option>Urgent</option>
+                  <option>Très urgent</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg">
+              <label class="fl" data-i18n="lbl_msg">Message / Symptômes</label>
+              <textarea class="fta" id="rq-msg" placeholder="Décrivez vos symptômes ou raisons…"></textarea>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button class="btn-send" id="btn-send" onclick="submitRDV()">
+                <span data-i18n="btn_send"> Envoyer la demande</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MES RDV -->
+        <div class="page" id="pg-mes-rdv">
+          <div class="page-title" data-i18n="pg_myrdv"> Mes rendez-vous</div>
+          <div class="page-sub" data-i18n="pg_myrdv_sub">Suivez l'état de toutes vos demandes.</div>
+          <div id="rdv-list"></div>
+        </div>
+
+        <!-- PROFIL -->
+        <div class="page" id="pg-profil">
+          <div class="page-title" data-i18n="pg_profil"> Mon profil</div>
+          <div class="page-sub" data-i18n="pg_profil_sub">Modifiez vos informations personnelles.</div>
+          <div id="profil-content"></div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /app-body -->
+  </div><!-- /app -->
+
+  <div id="toasts"></div>
+
+  <script src="patient.js"></script>
+</body>
+
+</html>
